@@ -11,7 +11,7 @@
     <title>Fake Job Detection</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
@@ -360,7 +360,7 @@
 
 <!-- JAVASCRIPT -->
 
-<script src="js/script.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 
 </body>

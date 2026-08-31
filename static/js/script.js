@@ -91,3 +91,13 @@ fetch(footerPath)
   .then(data => {
     document.getElementById("footer").innerHTML = data;
   });
+
+
+  fetch("/footer")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("footer").innerHTML = data;
+    })
+    .catch(error => {
+        console.error("Footer loading error:", error);
+    });
