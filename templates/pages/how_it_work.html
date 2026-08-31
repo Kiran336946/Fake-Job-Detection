@@ -9,7 +9,7 @@
 
     <title>How It Works | Fake Job Detection</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
@@ -38,31 +38,31 @@
         <ul class="nav-links">
 
             <li>
-                <a href="../index.html">
+                <a href="{{ url_for('home') }}">
                     Home
                 </a>
             </li>
 
              <li>
-                <a href="about.html">
+                <a href="{{ url_for('about') }}">
                     About
                 </a>
             </li>
 
             <li>
-                <a href="text analysis.html">
+                <a href="{{ url_for('text_analysis') }}">
                     Text Analysis
                 </a>
             </li>
 
             <li>
-                <a href="how its work.html" class="active">
+                <a href="{{ url_for('how_it_works') }}" class="active">
                     How It Works
                 </a>
             </li>
 
             <li>
-                <a href="features.html">
+                <a href="{{ url_for('features') }}">
                     Features
                 </a>
             </li>
@@ -72,7 +72,7 @@
         </ul>
 
     </nav>
-<a href="login.html" class="get-started">Get Started</a>
+<a href="{{ url_for('login') }}" class="get-started">Get Started</a>
 </header>
 
 
@@ -264,7 +264,7 @@
 <div id="footer"></div>
 
 
-<script src="../js/script.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

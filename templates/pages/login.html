@@ -10,7 +10,7 @@
 
     <title>Login | Fake Job Detection</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
@@ -35,7 +35,7 @@
     </div>
 
 
-    <a href="../index.html" class="back-home">
+    <a href="{{ url_for('home') }}" class="back-home">
         ← Back to Home
     </a>
 
@@ -163,7 +163,7 @@
 
             Don't have an account?
 
-        <a href="signup.html">Create Account</a>
+        <a href="{{ url_for('signup') }}">Create Account</a>
 
         </p>
 
@@ -174,7 +174,7 @@
 <!--Right side image for login page -->
     <div class="login-image">
 
-        <img src="../image/login-side.png" 
+        <img src="{{ url_for('static', filename='image/login-side.png') }}"
              alt="Fake Job Detection">
 
     </div>
@@ -190,7 +190,7 @@
 <!-- ================= FOOTER ================= -->
 
 
-<script src="../js/login.js"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 
 </body>
 

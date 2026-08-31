@@ -56,6 +56,37 @@ def analyze():
         "job_text": job_text
     })
 
+# =========================
+# OTHER PAGES
+# =========================
+@app.route("/about")
+def about():
+    return render_template("pages/about.html")
+
+
+@app.route("/how_it_work")
+def how_it_work():
+    return render_template("pages/how_it_work.html")
+
+
+@app.route("/text_analysis")
+def text_analysis():
+    return render_template("pages/text_analysis.html")
+
+
+@app.route("/login")
+def login():
+    return render_template("pages/login.html")
+
+@app.route("/features")
+def features():
+    return render_template("pages/features.html")
+
+
+@app.route("/signup")
+def signup():
+    return render_template("pages/signup.html")
+
 
 @app.route("/footer")
 def footer():

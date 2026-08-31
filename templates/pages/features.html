@@ -10,7 +10,7 @@
 
     <title>Features | Fake Job Detection</title>
 
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
@@ -35,45 +35,49 @@
     </div>
 
 
-    <nav>
+     <nav>
 
         <ul class="nav-links">
 
             <li>
-                <a href="../index.html">
+                <a href="{{ url_for('home') }}" class="active">
                     Home
                 </a>
             </li>
-
-            <li>
-                <a href="about.html">
+             <li>
+                <a href="{{ url_for('about') }}">
                     About
+                </a>
+            </li>
+             <li>
+                <a href="{{ url_for('features') }}">
+                    Features
                 </a>
             </li>
 
             <li>
-                <a href="text analysis.html">
+                <a href="{{ url_for('text_analysis') }}">
                     Text Analysis
                 </a>
             </li>
 
             <li>
-                <a href="how its work.html">
+                <a href="{{ url_for('how_it_work') }}">
                     How It Works
                 </a>
             </li>
 
             <li>
-                <a href="features.html" class="active">
-                    Features
-                </a>
-            </li>
 
-           
         </ul>
 
     </nav>
-<a href="login.html" class="get-started">Get Started</a>
+
+
+    <!-- get started -->
+<a href="{{ url_for('login') }}" class="get-started">Get Started</a>
+
+
 
 </header>
 
@@ -341,7 +345,7 @@
        <div id="footer"></div>  
 
 
-<script src="../js/script.js"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 
