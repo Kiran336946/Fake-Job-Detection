@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Text Analysis | Fake Job Detection</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🛡
+        </div>
+
+        <div class="logo-text">
+            <strong>Fake Job</strong>
+            <span>Detection</span>
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="../index.html">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="about.html">
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a href="text analysis.html"
+                   class="active">
+                    Text Analysis
+                </a>
+            </li>
+
+            <li>
+                <a href="how its work.html">
+                    How It Works
+                </a>
+            </li>
+
+            <li>
+                <a href="features.html">
+                    Features
+                </a>
+            </li>
+
+            
+        </ul>
+
+    </nav>
+<a href="login.html" class="get-started">Get Started</a>
+
+</header>
+
+
+
+<!-- ================= TEXT ANALYSIS ================= -->
+
+<main class="analysis-page">
+
+
+    <section class="analysis-hero">
+
+        <div class="analysis-heading">
+
+            <p>
+                AI-POWERED VERIFICATION
+            </p>
+
+            <h1>
+                Analyze a Job Posting
+            </h1>
+
+            <span>
+                Paste the job description below and our
+                system will analyze it for suspicious
+                patterns and scam indicators.
+            </span>
+
+        </div>
+
+
+
+        <!-- ANALYSIS BOX -->
+
+        <div class="analysis-box">
+
+
+            <div class="analysis-top">
+
+                <div>
+
+                    <h2>
+                        Job Description
+                    </h2>
+
+                    <p>
+                        Paste the complete job advertisement
+                        in the box below.
+                    </p>
+
+                </div>
+
+
+                <span class="secure-badge">
+                    🔒 Secure Analysis
+                </span>
+
+            </div>
+
+
+            <textarea
+                id="jobText"
+                placeholder="Paste job description here...
+
+Example:
+We are looking for a motivated employee.
+No experience required.
+Earn $5,000 per week.
+Send your personal information to apply..."
+            ></textarea>
+
+
+            <div class="analysis-actions">
+
+                <button
+                    type="button"
+                    class="analyze-btn"
+                    id="analyzeBtn">
+
+                    🔍 Analyze Job
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="clear-btn"
+                    id="clearBtn">
+
+                    Clear
+
+                </button>
+
+            </div>
+
+
+            <!-- RESULT -->
+
+            <div
+                class="result-box"
+                id="resultBox">
+
+
+                <div class="result-header">
+
+                    <div>
+
+                        <p>
+                            ANALYSIS RESULT
+                        </p>
+
+                        <h2 id="resultTitle">
+                            Waiting for Analysis
+                        </h2>
+
+                    </div>
+
+
+                    <div
+                        class="risk-circle"
+                        id="riskScore">
+
+                        --%
+
+                    </div>
+
+                </div>
+
+
+                <div class="risk-bar">
+
+                    <div
+                        class="risk-progress"
+                        id="riskProgress">
+                    </div>
+
+                </div>
+
+
+                <p
+                    class="result-message"
+                    id="resultMessage">
+
+                    Enter a job description and click
+                    "Analyze Job" to get a result.
+
+                </p>
+
+
+                <div
+                    class="warning-list"
+                    id="warningList">
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<div id="footer"></div>
+
+
+<!-- JAVASCRIPT -->
+
+<script src="../js/script.js"></script>
+
+<script src="../js/text-analysis.js"></script>
+
+
+</body>
+
+</html>
