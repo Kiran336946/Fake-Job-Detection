@@ -1,390 +1,192 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
-import os
-import pickle
-import re
-import numpy as np
+from flask import Flask, request, jsonify, render_template, send_from_directory 
+from transformers import AutoTokenizer, AutoModelForSequenceClassification 
+import torch 
+# ========================================================= 
+# # FLASK APP 
+# # ========================================================= 
 
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+app = Flask(__name__) 
+# ========================================================= 
+# # HUGGING FACE MODEL 
+# # ========================================================= 
+MODEL_NAME = "rehan-ml/scamshield-scam-detector" 
+print("\n========================================") 
+print("Loading ScamShield model...") 
+print("========================================") 
 
+# Load tokenizer 
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME) 
 
-# ============================================================
-# FLASK APP
-# ============================================================
+# Load model 
+model = AutoModelForSequenceClassification.from_pretrained( MODEL_NAME ) 
 
-app = Flask(__name__)
+# Set model to evaluation mode 
+model.eval() 
 
+print("ScamShield model loaded successfully!") 
+print("Model labels:", model.config.id2label) 
+print("========================================\n") 
 
-# ============================================================
-# MODEL PATHS
-# ============================================================
+# ========================================================= 
+# # MODEL PREDICTION 
+# # ========================================================= 
+def predict_job(job_text): 
+    # ----------------------------------------------------- 
+    # # Convert job text into tokens 
+    # # ----------------------------------------------------- 
+    inputs = tokenizer( job_text, return_tensors="pt", truncation=True, max_length=512 ) 
 
-MODEL_PATH = os.path.join("model", "fake_job_lstm_model.h5")
-TOKENIZER_PATH = os.path.join("model", "tokenizer.pkl")
-THRESHOLD_PATH = os.path.join("model", "threshold.pkl")
+    # ----------------------------------------------------- 
+    # # Run the model 
+    # # ----------------------------------------------------- 
+    with torch.no_grad(): outputs = model(**inputs) 
 
-MAX_SEQUENCE_LENGTH = 200
+    # ----------------------------------------------------- 
+    # Convert model output into probabilities 
+    # # ----------------------------------------------------- 
+    probabilities = torch.softmax( outputs.logits, dim=1 ) 
 
-# Default threshold
-FRAUD_THRESHOLD = 0.80
+    # ----------------------------------------------------- 
+    # Based on the model: 
+    # # Index 0 = Safe # Index 1 = Scam 
+    # # ----------------------------------------------------- 
+    safe_probability = probabilities[0][0].item() 
+    scam_probability = probabilities[0][1].item() 
 
+    # ----------------------------------------------------- 
+    # # Classification 
+    # # ----------------------------------------------------- 
+    if scam_probability >= 0.50: 
+        result = "FRAUDULENT" 
+    else: 
+        result = "LEGITIMATE" 
 
-# ============================================================
-# TEXT CLEANING
-# MUST MATCH TRAINING CODE
-# ============================================================
+    # Convert scam probability to percentage 
+    risk_percentage = round( scam_probability * 100, 2 ) 
 
-def clean_text(text):
-    text = str(text)
+    return ( result, scam_probability, safe_probability, risk_percentage ) 
 
-    # Remove URLs
-    text = re.sub(r'http\S+|www\S+', ' ', text)
+# ========================================================= 
+# # HOME PAGE 
+# # ========================================================= 
+@app.route("/") 
+def home(): 
+    return render_template("index.html") 
 
-    # Keep only English letters and spaces
-    text = re.sub(r'[^a-zA-Z\s]', ' ', text)
-
-    # Convert to lowercase
-    text = text.lower()
-
-    # Remove extra spaces
-    text = re.sub(r'\s+', ' ', text)
-
-    return text.strip()
-
-
-# ============================================================
-# LOAD MODEL
-# ============================================================
-
-print("\n========================================")
-print("Loading Fake Job Detection Model")
-print("========================================")
-
-
-# Check files exist
-if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(
-        f"Model file not found: {os.path.abspath(MODEL_PATH)}"
-    )
-
-if not os.path.exists(TOKENIZER_PATH):
-    raise FileNotFoundError(
-        f"Tokenizer file not found: {os.path.abspath(TOKENIZER_PATH)}"
-    )
-
-
-# Print absolute paths
-print("\nMODEL PATH:")
-print(os.path.abspath(MODEL_PATH))
-
-print("\nTOKENIZER PATH:")
-print(os.path.abspath(TOKENIZER_PATH))
-
-print("\nTHRESHOLD PATH:")
-print(os.path.abspath(THRESHOLD_PATH))
-
-
-# ------------------------------------------------------------
-# Load tokenizer
-# ------------------------------------------------------------
-
-print("\nLoading tokenizer...")
-
-with open(TOKENIZER_PATH, "rb") as f:
-    tokenizer = pickle.load(f)
-
-print("Tokenizer loaded successfully!")
-
-
-# ------------------------------------------------------------
-# Load Keras model
-# ------------------------------------------------------------
-
-print("\nLoading H5 model...")
-
-model = load_model(MODEL_PATH)
-
-print("H5 model loaded successfully!")
-
-
-# ------------------------------------------------------------
-# Load threshold
-# ------------------------------------------------------------
-
-FRAUD_THRESHOLD = 0.80
-
-print("\nUsing fraud threshold:", FRAUD_THRESHOLD)
-
-
-print("\n========================================")
-print("Model initialization complete!")
-print("========================================\n")
-
-
-# ============================================================
-# HOME PAGE
-# ============================================================
-
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-
-# ============================================================
-# ANALYZE JOB
-# ============================================================
-
+# ========================================================= 
+# # ANALYZE JOB 
+# # ========================================================= 
 @app.route("/analyze", methods=["POST"])
 def analyze():
-
     try:
-
-        # ----------------------------------------------------
-        # Get JSON data
-        # ----------------------------------------------------
-
+        # -------------------------------------------------
+        # Get JSON data sent by JavaScript
+        # -------------------------------------------------
         data = request.get_json()
 
+        # -------------------------------------------------
+        # Check if data exists
+        # -------------------------------------------------
         if not data:
+            return jsonify({"success": False, "error": "No data received."}), 400
 
-            return jsonify({
-                "success": False,
-                "error": "No data received"
-            }), 400
-
-
-        # ----------------------------------------------------
+        # -------------------------------------------------
         # Get job text
-        # ----------------------------------------------------
-
+        # -------------------------------------------------
         job_text = data.get("job_text", "").strip()
 
+        # -------------------------------------------------
+        # Check if text is empty
+        # -------------------------------------------------
         if not job_text:
-
-            return jsonify({
-                "success": False,
-                "error": "Job text is required"
-            }), 400
-
-
-        # ----------------------------------------------------
-        # Display input
-        # ----------------------------------------------------
+            return jsonify({"success": False, "error": "Job text is required."}), 400
 
         print("\n========================================")
         print("Analyzing Job Description")
         print("========================================")
+        print("Text length:", len(job_text))
+        print("Running ScamShield model...")
 
-        print("\nOriginal text:")
-        print(job_text)
+        # -------------------------------------------------
+        # Run model prediction
+        # -------------------------------------------------
+        (result, scam_probability, safe_probability, risk_percentage) = predict_job(job_text)
 
-
-        # ----------------------------------------------------
-        # Clean text
-        # SAME AS TRAINING
-        # ----------------------------------------------------
-
-        cleaned_text = clean_text(job_text)
-
-        print("\nCleaned text:")
-        print(cleaned_text)
-
-
-        # ----------------------------------------------------
-        # Tokenization
-        # ----------------------------------------------------
-
-        sequence = tokenizer.texts_to_sequences(
-            [cleaned_text]
-        )
-
-        print("\nTokenized sequence:")
-        print(sequence)
-
-
-        # ----------------------------------------------------
-        # Padding
-        # ----------------------------------------------------
-
-        padded_sequence = pad_sequences(
-            sequence,
-            maxlen=MAX_SEQUENCE_LENGTH,
-            padding="post",
-            truncating="post"
-        )
-
-        print("\nInput shape:")
-        print(padded_sequence.shape)
-
-
-        # ----------------------------------------------------
-        # Model prediction
-        # ----------------------------------------------------
-
-        prediction = model.predict(
-            padded_sequence,
-            verbose=0
-        )
-
-        print("\nRaw prediction:")
-        print(prediction)
-
-
-        probability = float(
-            prediction[0][0]
-        )
-
-        print(
-            "\nProbability:",
-            probability
-        )
-
-
-        # ----------------------------------------------------
-        # Classification
-        # ----------------------------------------------------
-
-        if probability >= FRAUD_THRESHOLD:
-
-            result = "FRAUDULENT"
-
-        else:
-
-            result = "LEGITIMATE"
-
-
-        # ----------------------------------------------------
-        # Risk percentage
-        # ----------------------------------------------------
-
-        risk_percentage = round(
-            probability * 100,
-            2
-        )
-
-
-        print(
-            "Threshold:",
-            FRAUD_THRESHOLD
-        )
-
-        print(
-            "Result:",
-            result
-        )
-
-        print(
-            "Risk Percentage:",
-            risk_percentage
-        )
-
+        # -------------------------------------------------
+        # Print result in PowerShell
+        # -------------------------------------------------
+        print("Prediction:", result)
+        print("Safe probability:", round(safe_probability * 100, 2), "%")
+        print("Scam probability:", round(scam_probability * 100, 2), "%")
         print("========================================\n")
 
-
-        # ----------------------------------------------------
-        # Send response to frontend
-        # ----------------------------------------------------
-
+        # -------------------------------------------------
+        # Send result to frontend
+        # -------------------------------------------------
         return jsonify({
-
             "success": True,
-
-            "prediction": result,
-
-            "probability": round(
-                probability,
-                6
-            ),
-
-            "risk_percentage": risk_percentage,
-
-            "threshold": FRAUD_THRESHOLD
-
+            "prediction": result,                              # Scam probability as decimal
+            "probability": round(scam_probability, 6),         # Risk percentage for website
+            "risk_percentage": risk_percentage,                # Safe probability
+            "safe_probability": round(safe_probability, 6),    # Scam probability
+            "scam_probability": round(scam_probability, 6)
         })
 
-
     except Exception as e:
-
         print("\nERROR:")
         print(str(e))
+        return jsonify({"success": False, "error": str(e)}), 500
+# ========================================================= 
+# # ABOUT PAGE 
+# # ========================================================= 
+@app.route("/about") 
+def about(): 
+    return render_template( "pages/about.html" ) 
 
-        return jsonify({
+# ========================================================= 
+# # HOW IT WORKS PAGE 
+# # ========================================================= 
+@app.route("/how_it_work") 
+def how_it_work(): 
+    return render_template( "pages/how_it_work.html" ) 
 
-            "success": False,
+# ========================================================= 
+# # TEXT ANALYSIS PAGE 
+# # ========================================================= 
+@app.route("/text_analysis") 
+def text_analysis(): 
+    return render_template( "pages/text_analysis.html" ) 
 
-            "error": str(e)
+# ========================================================= 
+# # LOGIN PAGE 
+# # ========================================================= 
+@app.route("/login") 
+def login(): 
+    return render_template( "pages/login.html" ) 
 
-        }), 500
+# ========================================================= 
+# # FEATURES PAGE 
+# # ========================================================= 
+@app.route("/features") 
+def features(): 
+    return render_template( "pages/features.html" ) 
 
+# ========================================================= 
+# # SIGNUP PAGE 
+# # ========================================================= 
+@app.route("/signup") 
+def signup(): 
+    return render_template( "pages/signup.html" ) 
 
-# ============================================================
-# OTHER EXISTING ROUTES
-# ============================================================
+# ========================================================= 
+# # FOOTER 
+# # ========================================================= 
+@app.route("/footer") 
+def footer(): 
+    return send_from_directory( "templates", "footer.html" ) 
 
-@app.route("/about")
-def about():
-
-    return render_template(
-        "pages/about.html"
-    )
-
-
-@app.route("/how_it_work")
-def how_it_work():
-
-    return render_template(
-        "pages/how_it_work.html"
-    )
-
-
-@app.route("/text_analysis")
-def text_analysis():
-
-    return render_template(
-        "pages/text_analysis.html"
-    )
-
-
-@app.route("/login")
-def login():
-
-    return render_template(
-        "pages/login.html"
-    )
-
-
-@app.route("/features")
-def features():
-
-    return render_template(
-        "pages/features.html"
-    )
-
-
-@app.route("/signup")
-def signup():
-
-    return render_template(
-        "pages/signup.html"
-    )
-
-
-@app.route("/footer")
-def footer():
-
-    return send_from_directory(
-        "templates",
-        "footer.html"
-    )
-
-
-# ============================================================
-# RUN FLASK
-# ============================================================
-
-if __name__ == "__main__":
-
-    app.run(
-        debug=True
-    )
-
+# ========================================================= 
+# # RUN FLASK 
+# # ========================================================= 
+if __name__ == "__main__": 
+    app.run( debug=True )
