@@ -10,7 +10,8 @@
 
     <title>Login | Fake Job Detection</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
@@ -69,7 +70,8 @@
 
         <!-- LOGIN FORM -->
 
-        <form id="loginForm">
+        <form method="POST"
+              action="{{ url_for('login') }}">
 
 
             <!-- EMAIL -->
@@ -83,6 +85,7 @@
                 <input
                     type="email"
                     id="email"
+                    name="email"
                     placeholder="Enter your email"
                     required>
 
@@ -101,6 +104,7 @@
                 <input
                     type="password"
                     id="password"
+                    name="password"
                     placeholder="Enter your password"
                     required>
 
@@ -116,7 +120,8 @@
 
                     <input
                         type="checkbox"
-                        id="remember">
+                        id="remember"
+                        name="remember">
 
                     <span>
                         Remember me
@@ -148,39 +153,31 @@
 
 
 
-        <!-- MESSAGE -->
-
-        <div
-            id="loginMessage"
-            class="login-message">
-        </div>
-
-
-
         <!-- SIGN UP -->
 
         <p class="signup-text">
 
             Don't have an account?
 
-        <a href="{{ url_for('signup') }}">Create Account</a>
+            <a href="{{ url_for('signup') }}">
+                Create Account
+            </a>
 
         </p>
 
 
     </div>
-    </div>
 
-<!--Right side image for login page -->
+
+    <!-- Right side image -->
+
     <div class="login-image">
 
-        <img src="{{ url_for('static', filename='image/login-side.png') }}"
-             alt="Fake Job Detection">
+        <img
+            src="{{ url_for('static', filename='image/login-side.png') }}"
+            alt="Fake Job Detection">
 
     </div>
-
-
-</main>
 
 
 </main>
@@ -188,9 +185,6 @@
 
 
 <!-- ================= FOOTER ================= -->
-
-
-<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 
 </body>
 

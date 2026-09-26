@@ -1,0 +1,577 @@
+/* =========================================
+   DASHBOARD PAGE
+========================================= */
+
+.dashboard-page {
+    margin: 0;
+    padding: 0;
+    background: #f5f7fb;
+    color: #102a43;
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+.dashboard-page .navbar {
+    height: 90px;
+    background: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 45px;
+
+    border-bottom: 1px solid #d9e2ec;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.dashboard-page .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.dashboard-page .logo-icon {
+    width: 52px;
+    height: 52px;
+
+    background: #0b2145;
+    color: white;
+
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+}
+
+.dashboard-page .logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard-page .logo-text strong {
+    font-size: 21px;
+    color: #102a43;
+}
+
+.dashboard-page .logo-text span {
+    font-size: 15px;
+    color: #315c9b;
+}
+
+.dashboard-nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.dashboard-nav a {
+    text-decoration: none;
+
+    color: #102a43;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.dashboard-nav a:hover {
+    color: #315c9b;
+}
+
+
+/* =========================================
+   MAIN DASHBOARD
+========================================= */
+
+.dashboard-container {
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 45px 30px 70px;
+}
+
+
+/* =========================================
+   WELCOME SECTION
+========================================= */
+
+.dashboard-welcome {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+}
+
+.dashboard-welcome h1 {
+    margin: 0 0 8px;
+
+    font-size: 34px;
+
+    color: #102a43;
+}
+
+.dashboard-welcome p {
+    margin: 0;
+
+    color: #627d98;
+
+    font-size: 16px;
+}
+
+.user-info {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 5px;
+}
+
+.user-info strong {
+    color: #102a43;
+
+    font-size: 16px;
+}
+
+.user-info span {
+    color: #829ab1;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   STATISTICS
+========================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 20px;
+
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #ffffff;
+
+    border: 1px solid #e1e8f0;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 17px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 12px;
+
+    background: #eef3f9;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+
+    flex-shrink: 0;
+}
+
+.stat-label {
+    display: block;
+
+    font-size: 14px;
+
+    color: #627d98;
+
+    margin-bottom: 5px;
+}
+
+.stat-card h2 {
+    margin: 0;
+
+    font-size: 28px;
+
+    color: #102a43;
+}
+
+
+/* =========================================
+   CHART + ACCOUNT GRID
+========================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        1.3fr 1fr;
+
+    gap: 25px;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================
+   GENERAL DASHBOARD CARD
+========================================= */
+
+.dashboard-card {
+    background: #ffffff;
+
+    border: 1px solid #e1e8f0;
+
+    border-radius: 18px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+.card-header h2 {
+    margin: 0 0 5px;
+
+    font-size: 22px;
+
+    color: #102a43;
+}
+
+.card-header span {
+    color: #829ab1;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   CHART
+========================================= */
+
+.chart-container {
+    position: relative;
+
+    height: 300px;
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* =========================================
+   ACCOUNT
+========================================= */
+
+.account-detail {
+    padding: 17px 0;
+
+    border-bottom: 1px solid #edf2f7;
+}
+
+.account-detail span {
+    display: block;
+
+    color: #829ab1;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+}
+
+.account-detail strong {
+    color: #102a43;
+
+    font-size: 16px;
+}
+
+.account-actions {
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 25px;
+
+    flex-wrap: wrap;
+}
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.dashboard-button {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 11px 17px;
+
+    border-radius: 9px;
+
+    background: #0b2145;
+
+    color: white !important;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    border: none;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.dashboard-button:hover {
+    background: #163b70;
+
+    transform: translateY(-1px);
+}
+
+.logout-button {
+    background: #c0392b;
+}
+
+.logout-button:hover {
+    background: #a93226;
+}
+
+
+/* =========================================
+   ANALYSIS HISTORY
+========================================= */
+
+.history-card {
+    margin-bottom: 30px;
+}
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.analysis-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 750px;
+}
+
+.analysis-table th {
+    text-align: left;
+
+    padding: 15px;
+
+    background: #f5f7fb;
+
+    color: #486581;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    border-bottom: 1px solid #d9e2ec;
+}
+
+.analysis-table td {
+    padding: 16px 15px;
+
+    border-bottom: 1px solid #edf2f7;
+
+    color: #334e68;
+
+    font-size: 14px;
+
+    vertical-align: top;
+}
+
+.analysis-table tbody tr:hover {
+    background: #fafbfd;
+}
+
+
+/* =========================================
+   RESULT BADGES
+========================================= */
+
+.result-badge {
+    display: inline-block;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.result-badge.fraudulent {
+    background: #fff1f0;
+
+    color: #c0392b;
+}
+
+.result-badge.legitimate {
+    background: #eaf8f0;
+
+    color: #218c54;
+}
+
+
+/* =========================================
+   EMPTY HISTORY
+========================================= */
+
+.empty-history {
+    text-align: center;
+
+    padding: 50px 20px;
+
+    color: #829ab1;
+}
+
+.empty-history > div {
+    font-size: 42px;
+
+    margin-bottom: 15px;
+}
+
+.empty-history h3 {
+    margin: 0 0 8px;
+
+    color: #486581;
+
+    font-size: 20px;
+}
+
+.empty-history p {
+    margin: 0 0 20px;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .dashboard-page .navbar {
+        height: auto;
+
+        padding: 18px 20px;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .dashboard-nav {
+        width: 100%;
+
+        justify-content: center;
+
+        gap: 15px;
+    }
+
+    .dashboard-container {
+        padding: 30px 18px 50px;
+    }
+
+    .dashboard-welcome {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+    .user-info {
+        align-items: flex-start;
+    }
+
+    .dashboard-welcome h1 {
+        font-size: 27px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card {
+        padding: 20px;
+    }
+
+    .card-header {
+        align-items: flex-start;
+
+        gap: 15px;
+
+        flex-direction: column;
+    }
+}
